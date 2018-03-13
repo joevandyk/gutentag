@@ -24,7 +24,10 @@ class Gutentag::TagValidations
 
   def add_length_validation?
     klass.table_exists? && limit.present?
-  rescue ActiveRecord::NoDatabaseError
+  rescue StandardError
+    # Catch any problem connecting to the database at this point. This will let Rails 
+    # boot to run other tasks (like deploying) without being forced to have a database 
+    # connection established.
     false
   end
 
